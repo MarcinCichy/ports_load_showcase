@@ -67,7 +67,10 @@ Domyslna retencja: probki 30 dni, zdarzenia 365 dni, podsumowania cykli 730 dni.
 ## Dashboard
 
 Panel WWW zawiera karty stanu, wykres ruchu calej sieci, ranking portow, filtrowanie problemow,
-historie wybranego portu, dziennik zdarzen oraz eksport CSV. Domyslnie nasluchuje tylko lokalnie.
+historie wybranego portu, dziennik zdarzen oraz eksport CSV. Motyw jasny lub ciemny jest zapisywany
+osobno w kazdej przegladarce i jest stosowany takze do raportow HTML/PDF. Lista urzadzen pokazuje
+nazwe z LibreNMS (`sysName`) oraz pozwala ustawic wspolna, lokalna nazwe uzywana tylko w Ports Load.
+Zmiana tej nazwy nie modyfikuje konfiguracji LibreNMS. Domyslnie dashboard nasluchuje tylko lokalnie.
 Udostepnienie w LAN: `python dashboard.py --host 0.0.0.0` (przedtem zabezpiecz dostep firewallem).
 
 ## Diagnostyka multicastu
