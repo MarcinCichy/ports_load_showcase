@@ -64,6 +64,35 @@ z lokalnej bazy SQLite i wyswietla powod przelaczenia.
 
 Domyslna retencja: probki 30 dni, zdarzenia 365 dni, podsumowania cykli 730 dni.
 
+## Ochrona SQLite i wolnego miejsca
+
+Sekcja `storage` w konfiguracji steruje automatycznymi checkpointami WAL, progami miejsca oraz
+porcjami retencji. Domyslnie aplikacja ostrzega przy WAL 256 MiB lub mniej niz 10 GiB wolnego
+miejsca. Przy WAL 1 GiB albo mniej niz 5 GiB wolnego miejsca poller nie rozpoczyna kolejnej
+transakcji zapisu. Proces pozostaje uruchomiony i ponawia probe z rosnacym opoznieniem.
+
+Checkpoint zaczyna sie w trybie `PASSIVE`. Plik WAL jest automatycznie obcinany dopiero wtedy,
+gdy wszystkie ramki zostaly przeniesione i SQLite potwierdza brak blokujacego czytelnika. Samo
+`journal_size_limit` jest tylko dodatkowym ograniczeniem rozmiaru po udanym checkpoincie.
+
+Retencja jest uruchamiana domyslnie co 6 godzin i usuwa rekordy porcjami. Aktualny stan portow
+jest aktualizowany przez UPSERT; usuwane sa tylko porty, ktorych nie bylo w zakonczonym cyklu.
+
+Lekki test procesu nie otwiera bazy:
+
+```text
+GET /api/live
+```
+
+Stan operacyjny, rozmiary DB/WAL/SHM i wolne miejsce sa dostepne tutaj:
+
+```text
+GET /api/app-health
+```
+
+Kontrola integralnosci pozostaje operacja reczna (`python main.py --check-db`) i nie jest
+wykonywana przez healthcheck Dockera.
+
 ## Dashboard
 
 Panel WWW zawiera karty stanu, wykres ruchu calej sieci, ranking portow, filtrowanie problemow,
